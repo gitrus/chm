@@ -8,7 +8,7 @@ public class check
 {
     public static void main (String [] args)
     {
-        System.out.println("Goodbye, World!");
+        System.out.println("Hello, World!");
     }
     Matrix m1 = new Matrix();
     Matrix m2 = new Matrix();
