@@ -4,7 +4,6 @@ import java.lang.reflect.*;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Random;
-
 /**
  * Created by Vladimir on 15.11.2014.
  */
@@ -62,14 +61,14 @@ public class Matrix<T>
 
     public static Matrix transporent(Matrix matrix)
     {
-        int height =  matrix.getN();
+        int height = matrix.getN();
         int width = matrix.getM();
         if (( width > 0 ) && ( height > 0 ))
         {
             Matrix returnedMatrix = new Matrix(width,height);
             for ( int i = 0; i < height; ++i )
             {
-                for ( int j = 0; j < width; ++j)
+                for ( int j = 0; j < width; ++j )
                 {
                     returnedMatrix._matrix[j][i] = matrix._matrix[i][j];
                 }
@@ -81,8 +80,27 @@ public class Matrix<T>
 
     public static Matrix multiply (Matrix matrix1, Matrix matrix2)
     {
-        Matrix returnedMatrix = new Matrix();
-        return returnedMatrix;
+        int height2 = matrix2.getN();
+        int width1 = matrix1.getM();
+        int height1 = matrix1.getN();
+        int width2 = matrix2.getM();
+        Matrix returnedMatrix = new Matrix(height1,width2);
+        Matrix matrixTransporent = Matrix.transporent(matrix2);
+        if (( width1 > 0 ) && (height2 > 0) && (height2 == width1))
+        {
+            for (int i = 0; i < height1; ++i)
+            {
+                for (int j = 0; j < width2; ++j)
+                {
+                    for (int k = 0; k < height2; ++k)
+                    {
+                        returnedMatrix._matrix[i][j] += matrix1._matrix[i][k] * matrixTransporent._matrix[j][k];
+                    }
+                }
+            }
+            return returnedMatrix;
+        }
+        return null;
     }
 
     @Override
