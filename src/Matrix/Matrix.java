@@ -8,7 +8,7 @@ import java.util.Random;
  * Created by Vladimir on 15.11.2014.
  */
 
-public class Matrix<T>
+public class Matrix
 {
     private double[][] _matrix;
     private int _n;
@@ -22,6 +22,9 @@ public class Matrix<T>
     public int getM () { return _m; }
 
     private void setM (int value) { _m = value; }
+
+    public double getMatrix(int x, int y){ return this._matrix[x][y]; }
+
     /*---Getter-Setter---*/
 
     /*---Ctor---*/
@@ -80,9 +83,9 @@ public class Matrix<T>
 
     public static Matrix multiply (Matrix matrix1, Matrix matrix2)
     {
-        int height2 = matrix2.getN();
         int width1 = matrix1.getM();
         int height1 = matrix1.getN();
+        int height2 = matrix2.getN();
         int width2 = matrix2.getM();
         Matrix returnedMatrix = new Matrix(height1,width2);
         Matrix matrixTransporent = Matrix.transporent(matrix2);
