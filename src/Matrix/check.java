@@ -18,6 +18,7 @@ public class check
         ExcelWork.writeExcel("Formulas.xls", m1);
         ExcelWork.writeExcel("Formulas1.xls", m2);
         ExcelWork.writeExcel("Formulas2.xls", m3);
+        ExcelWork.readExcel("Formulas.xls");
         /*System.out.print(m1.toString());
         Matrix m2 = new Matrix(50,50);
         m2.fill();
