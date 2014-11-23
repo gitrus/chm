@@ -8,14 +8,18 @@ public class check
 {
     public static void main (String [] args) throws IOException
     {
+        double[][] matrix = {{1,3,2,3},{2,3,7,4},{3,8,1,5},{3,1,9,5}};
+        //double[][] matrix = {{1,2,3},{2,3,4},{3,3,4}};
+        //double[][] matrix = {{20,30,30},{20,20,40},{30,30,50}};
 
-        Matrix m1 = new Matrix(10,10);
-        m1.fillRandom();
+        Matrix m1 = new Matrix(matrix);
+        //Matrix m1 = new Matrix(3,3);
+        //m1.fillRandom();
         System.out.print(m1.toString());
-        System.out.print(Matrix.transparent(Matrix.cofactor(m1)));
 
-        System.out.print(Matrix.inverse(m1));
+        System.out.print(Matrix.inverse(m1).toString());
 
+        System.out.print(Matrix.multiply(m1, Matrix.inverse(m1)));
         /*Matrix m1 = new Matrix(5,10);
         m1.fillRandom();
         Matrix m2 = new Matrix(2,3);

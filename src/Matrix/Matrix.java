@@ -4,6 +4,7 @@ import java.lang.reflect.*;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Random;
+
 /**
  * Created by Vladimir on 15.11.2014.
  */
@@ -26,6 +27,23 @@ public class Matrix
     public double getValueAt(int x, int y){ return ( x > -1 ) && ( y > -1 ) ? this._matrix[x][y] : null; }
 
     public void setValueAt(int x, int y, double value) { if (( x > -1 ) && ( y > -1 )) _matrix[x][y] = value; }
+
+    /*public void setInfinityZero( Matrix matrix )
+    {
+        int width = matrix.getM();
+        int height = matrix.getN();
+        double eps = 0.0001;
+
+        for ( int i = 0; i < height; ++i )
+        {
+            for ( int j = 0; j < width; ++j)
+            {
+                if (matrix.getValueAt(i,j) < eps)
+                    matrix.setValueAt(i, j, 0);
+            }
+        }
+    }*/
+
     /*---Getter-Setter---*/
 
     /*---Ctor---*/
@@ -86,7 +104,7 @@ public class Matrix
             for (int j=0; j<getM(); ++j)
             {
                 Random rnd = new Random();
-                double a = rnd.nextInt(99999) - rnd.nextInt(99999) + rnd.nextInt(9999)/100.0;
+                double a = rnd.nextInt(99999) - rnd.nextInt(99999) + rnd.nextInt(9999);
                 _matrix[i][j] = a;
             }
         }
@@ -102,12 +120,12 @@ public class Matrix
 
         for (int i = 0; i < matrix.getN(); ++i)
         {
-            if (i == delColumn) continue;
+            if ( i == delRow ) continue;
             ++x;
             y = -1;
             for (int j = 0; j < matrix.getM(); ++j)
             {
-                if (j == delRow) continue;
+                if ( j == delColumn ) continue;
                 returnedMatrix.setValueAt(x, ++y, matrix.getValueAt(i, j));
             }
         }
@@ -192,7 +210,7 @@ public class Matrix
             for ( int j = 0; j < matrix.getM(); ++j)
             {
                 signI = (i%2 == 0) ? 1 : -1;
-                signJ = (i%2 == 0) ? 1 : -1;
+                signJ = (j%2 == 0) ? 1 : -1;
                 returnedMatrix.setValueAt(i, j, signI * signJ * determinant(createSubMatrix(matrix, i, j)));
             }
         }
@@ -207,11 +225,17 @@ public class Matrix
         Matrix returnedMatrix = new Matrix(height,width);
         for ( int i = 0; i < height; ++i)
         {
+            if (( width == 1) && ( height == 1))
+            {
+                returnedMatrix.setValueAt(0, 0, myConst);
+                break;
+            }
             for ( int j = 0; j < width; ++j)
             {
                 returnedMatrix.setValueAt(i, j, myConst * transparent(cofactor(matrix)).getValueAt(i, j));
             }
         }
+
         return returnedMatrix;
     }
 
