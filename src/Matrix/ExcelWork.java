@@ -10,6 +10,12 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+
+
+
+import javax.swing.text.html.*;
+
 /**
  * Created by Vladimir on 16.11.2014.
  */
@@ -38,7 +44,7 @@ public class ExcelWork
         System.out.println(fileName + " written successfully");
     }
 
-    public static void readExcel(String fileName) throws IOException
+    public static Matrix readExcel(String fileName) throws IOException
     {
 
         FileInputStream fileInput  = new FileInputStream(fileName);
@@ -46,21 +52,34 @@ public class ExcelWork
         Workbook workbook = new HSSFWorkbook(fileInput);
         Sheet sheet = workbook.getSheetAt(0);
         Iterator<Row> rowIterator = sheet.iterator();
+        int i = 0;
+        int j;
+        int createCount = -1;
+        Matrix returnedMatrix = new Matrix();
         while (rowIterator.hasNext())
         {
-            Row row = rowIterator.next();
-            Iterator<Cell> cellIterator = row.cellIterator();
 
+            Row row = rowIterator.next();
+            if ( createCount == -1 )
+            {
+                returnedMatrix = new Matrix(sheet.getLastRowNum() + 1, row.getLastCellNum());
+                createCount = 0;
+            }
+            Iterator<Cell> cellIterator = row.cellIterator();
+            j = 0;
             while (cellIterator.hasNext())
             {
                 Cell cell = cellIterator.next();
                 switch(cell.getCellType())
                 {
                     case Cell.CELL_TYPE_NUMERIC:
-                        System.out.println(cell.getNumericCellValue());
+                        returnedMatrix.setValueAt(i, j, cell.getNumericCellValue());
                 }
+            ++j;
             }
+        ++i;
         }
+    return returnedMatrix;
     }
 
 }
