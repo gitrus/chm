@@ -23,14 +23,15 @@ public class Matrix
 
     private void setM (int value) { _m = value; }
 
-    public double getMatrix(int x, int y){ return this._matrix[x][y]; }
+    public double getValueAt(int x, int y){ return ( x > -1 ) && ( y > -1 ) ? this._matrix[x][y] : null; }
 
+    public void setValueAt(int x, int y, double value) { if (( x > -1 ) && ( y > -1 )) _matrix[x][y] = value; }
     /*---Getter-Setter---*/
 
     /*---Ctor---*/
     public Matrix()
     {
-         _matrix = null;
+        _matrix = null;
         setN(0);
         setM(0);
     }
@@ -48,8 +49,37 @@ public class Matrix
         setN(n);
         setM(m);
     }
+
+    public Matrix(double[][] inpMatrix)
+    {
+        setN(inpMatrix.length);
+        setM(inpMatrix[0].length);
+        _matrix = new double[getN()][getM()];
+
+        for ( int i = 0; i < getN(); ++i)
+            for(int j = 0; j <getM(); ++j)
+                _matrix[i][j] = inpMatrix[i][j];
+    }
     /*---Ctor---*/
-    public void fill()
+
+    @Override
+    public String toString()
+    {
+        String retString = new String();
+        for(int i=0; i<getN(); ++i)
+        {
+            for (int j = 0; j < getM(); ++j)
+            {
+                retString += _matrix[i][j] + " ";
+            }
+            retString += String.format("\n");
+        }
+        return retString;
+    }
+
+    public boolean isSquare() { return (getM() == getN()); }
+
+    public void fillRandom()
     {
         for(int i=0; i<getN(); ++i )
         {
@@ -62,7 +92,29 @@ public class Matrix
         }
     }
 
-    public static Matrix transporent(Matrix matrix)
+    public static Matrix createSubMatrix(Matrix matrix, int delRow, int delColumn)
+    {
+        if ((delColumn<0)&&(delRow<0)) return null;
+
+        Matrix returnedMatrix = new Matrix(matrix.getN()-1,matrix.getM()-1);
+        int x = -1;
+        int y;
+
+        for (int i = 0; i < matrix.getN(); ++i)
+        {
+            if (i == delColumn) continue;
+            ++x;
+            y = -1;
+            for (int j = 0; j < matrix.getM(); ++j)
+            {
+                if (j == delRow) continue;
+                returnedMatrix.setValueAt(x, ++y, matrix.getValueAt(i, j));
+            }
+        }
+        return returnedMatrix;
+    }
+
+    public static Matrix transparent(Matrix matrix)
     {
         int height = matrix.getN();
         int width = matrix.getM();
@@ -87,8 +139,10 @@ public class Matrix
         int height1 = matrix1.getN();
         int height2 = matrix2.getN();
         int width2 = matrix2.getM();
+
         Matrix returnedMatrix = new Matrix(height1,width2);
-        Matrix matrixTransporent = Matrix.transporent(matrix2);
+        Matrix matrixTransparent = Matrix.transparent(matrix2);
+
         if (( width1 > 0 ) && (height2 > 0) && (height2 == width1))
         {
             for (int i = 0; i < height1; ++i)
@@ -97,7 +151,7 @@ public class Matrix
                 {
                     for (int k = 0; k < height2; ++k)
                     {
-                        returnedMatrix._matrix[i][j] += matrix1._matrix[i][k] * matrixTransporent._matrix[j][k];
+                        returnedMatrix._matrix[i][j] += matrix1.getValueAt(i,k) * matrixTransparent.getValueAt(j,k);
                     }
                 }
             }
@@ -106,18 +160,59 @@ public class Matrix
         return null;
     }
 
-    @Override
-    public String toString()
+    public static double determinant(Matrix matrix)
     {
-        String retString = new String();
-        for(int i=0; i<getN(); ++i)
+        if (!matrix.isSquare())
+            return 0;
+        if (matrix.getM() == 1)
         {
-            for (int j = 0; j < getM(); ++j)
-            {
-                retString += _matrix[i][j] + " ";
-            }
-            retString += String.format("\n");
+            return matrix.getValueAt(0, 0);
         }
-        return retString;
+        if (matrix.getN() == 2)
+        {
+            return (matrix.getValueAt(0, 0) * matrix.getValueAt(1, 1)) - ( matrix.getValueAt(0, 1) * matrix.getValueAt(1, 0));
+        }
+        int sign;
+        double mySum = 0.0;
+        for ( int i = 0; i < matrix.getN(); ++i)
+        {
+            sign = (i%2 == 0) ? 1 : -1;
+            mySum += sign * matrix.getValueAt(0, i) * determinant(createSubMatrix(matrix, 0, i));
+        }
+        return mySum;
     }
+
+    public static Matrix cofactor(Matrix matrix)
+    {
+        Matrix returnedMatrix = new Matrix(matrix.getN(), matrix.getM());
+        int signI;
+        int signJ;
+        for ( int i = 0; i < matrix.getN(); ++i )
+        {
+            for ( int j = 0; j < matrix.getM(); ++j)
+            {
+                signI = (i%2 == 0) ? 1 : -1;
+                signJ = (i%2 == 0) ? 1 : -1;
+                returnedMatrix.setValueAt(i, j, signI * signJ * determinant(createSubMatrix(matrix, i, j)));
+            }
+        }
+        return returnedMatrix;
+    }
+
+    public static Matrix inverse(Matrix matrix)
+    {
+        double myConst = (1.0/determinant(matrix));
+        int width = matrix.getM();
+        int height = matrix.getN();
+        Matrix returnedMatrix = new Matrix(height,width);
+        for ( int i = 0; i < height; ++i)
+        {
+            for ( int j = 0; j < width; ++j)
+            {
+                returnedMatrix.setValueAt(i, j, myConst * transparent(cofactor(matrix)).getValueAt(i, j));
+            }
+        }
+        return returnedMatrix;
+    }
+
 }

@@ -9,13 +9,24 @@ public class check
     public static void main (String [] args) throws IOException
     {
 
-        Matrix m1 = new Matrix(5,10);
-        m1.fill();
+        Matrix m1 = new Matrix(10,10);
+        m1.fillRandom();
+        System.out.print(m1.toString());
+        System.out.print(Matrix.transparent(Matrix.cofactor(m1)));
+
+        System.out.print(Matrix.inverse(m1));
+
+        /*Matrix m1 = new Matrix(5,10);
+        m1.fillRandom();
         Matrix m2 = new Matrix(2,3);
-        m2.fill();
+        m2.fillRandom();
         Matrix m3 = new Matrix(7,2);
-        m3.fill();
-        ExcelWork.writeExcel("Formulas.xls", m1);
+        m3.fillRandom();
+        double[][] matrix = {{4,5},{6,7}};
+        Matrix m1= new Matrix(matrix);
+        System.out.print(Matrix.inverse(m1).toString());*/
+
+        /*ExcelWork.writeExcel("Formulas.xls", m1);
         ExcelWork.writeExcel("Formulas1.xls", m2);
         ExcelWork.writeExcel("Formulas2.xls", m3);
         ExcelWork.readExcel("Formulas.xls");

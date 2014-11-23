@@ -22,13 +22,13 @@ public class ExcelWork
         int width = matrix.getM();
         int height = matrix.getN();
         Workbook workbook = new HSSFWorkbook();
-        Sheet sheet = workbook.createSheet("list");
+        Sheet sheet = workbook.createSheet("Matrix["+height+"]["+width+"]");
         for ( int i = 0; i < height; ++i)
         {
             Row row = sheet.createRow(i);
             for ( int j = 0; j < width; ++j)
             {
-                row.createCell(j).setCellValue(matrix.getMatrix(i,j));
+                row.createCell(j).setCellValue(matrix.getValueAt(i, j));
             }
         }
 
@@ -58,7 +58,6 @@ public class ExcelWork
                 {
                     case Cell.CELL_TYPE_NUMERIC:
                         System.out.println(cell.getNumericCellValue());
-
                 }
             }
         }
