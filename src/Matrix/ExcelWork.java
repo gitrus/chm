@@ -10,11 +10,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.hssf.usermodel.HSSFRow;
 
-
-
-import javax.swing.text.html.*;
 
 /**
  * Created by Vladimir on 16.11.2014.
@@ -28,7 +24,7 @@ public class ExcelWork
         int width = matrix.getM();
         int height = matrix.getN();
         Workbook workbook = new HSSFWorkbook();
-        Sheet sheet = workbook.createSheet("Matrix["+height+"]["+width+"]");
+        Sheet sheet = workbook.createSheet("Matrix("+height+")("+width+") ");
         for ( int i = 0; i < height; ++i)
         {
             Row row = sheet.createRow(i);

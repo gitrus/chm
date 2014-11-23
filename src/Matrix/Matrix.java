@@ -26,23 +26,24 @@ public class Matrix
 
     public double getValueAt(int x, int y){ return ( x > -1 ) && ( y > -1 ) ? this._matrix[x][y] : null; }
 
-    public void setValueAt(int x, int y, double value) { if (( x > -1 ) && ( y > -1 )) _matrix[x][y] = value; }
+    public void setValueAt(int y, int x, double value) { if (( x > -1 ) && ( y > -1 ) && ( x <= getM() ) && ( y <= getN() )) _matrix[y][x] = value; }
 
-    /*public void setInfinityZero( Matrix matrix )
+    public static void setNull(Matrix matrix)
     {
         int width = matrix.getM();
         int height = matrix.getN();
-        double eps = 0.0001;
-
+        double eps = 0.00001;
         for ( int i = 0; i < height; ++i )
         {
             for ( int j = 0; j < width; ++j)
             {
-                if (matrix.getValueAt(i,j) < eps)
+                if ((matrix.getValueAt(i, j) < eps) && (matrix.getValueAt(i, j) > 0))
+                    matrix.setValueAt(i, j, 0);
+                if ((matrix.getValueAt(i, j) > (-eps)) && (matrix.getValueAt(i, j) < 0))
                     matrix.setValueAt(i, j, 0);
             }
         }
-    }*/
+    }
 
     /*---Getter-Setter---*/
 
@@ -63,6 +64,7 @@ public class Matrix
 
     public Matrix(int n,int m)
     {
+        if ((n <= 0) && (m <= 0)) return;
         _matrix = new double[n][m];
         setN(n);
         setM(m);
@@ -95,7 +97,7 @@ public class Matrix
         return retString;
     }
 
-    public boolean isSquare() { return (getM() == getN()); }
+    public boolean isSquare() { return ( getM() == getN() ); }
 
     public void fillRandom()
     {
@@ -104,7 +106,7 @@ public class Matrix
             for (int j=0; j<getM(); ++j)
             {
                 Random rnd = new Random();
-                double a = rnd.nextInt(99999) - rnd.nextInt(99999) + rnd.nextInt(9999);
+                double a = rnd.nextInt(99999) - rnd.nextInt(99999) + rnd.nextInt(9999)/100.00;
                 _matrix[i][j] = a;
             }
         }
