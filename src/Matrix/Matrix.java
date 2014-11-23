@@ -241,4 +241,34 @@ public class Matrix
         return returnedMatrix;
     }
 
+    private static double matrixNorm(Matrix matrix)
+    {
+        int width = matrix.getM();
+        int height = matrix.getN();
+        double[] firstArray = new double[height];
+        double returnedNorm;
+        for ( int k = 0; k < height; ++k)
+        {
+            for ( int i = 0; i < width; ++i)
+            {
+                firstArray[k] += Math.abs(matrix.getValueAt(k, i));
+            }
+        }
+        returnedNorm = firstArray[0];
+        for ( int i = 1; i < firstArray.length; ++i)
+        {
+            if ( returnedNorm < firstArray[i])
+                returnedNorm = firstArray[i];
+            else
+                ++i;
+        }
+    return returnedNorm;
+    }
+
+    public static double matrixDependent(Matrix matrix)
+    {
+        double dependent = matrixNorm(matrix) * matrixNorm(Matrix.inverse(matrix));
+        return dependent;
+    }
+
 }
